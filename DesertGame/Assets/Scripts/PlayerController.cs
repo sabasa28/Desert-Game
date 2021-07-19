@@ -12,11 +12,13 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         currentMovementSpeed = walkingSpeed;
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        currentMovementSpeed = walkingSpeed;
         float movementX = Input.GetAxisRaw("Horizontal");
         float movementY = Input.GetAxisRaw("Vertical");
         movement = new Vector3(movementX, movementY).normalized;
