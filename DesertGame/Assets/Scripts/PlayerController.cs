@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float walkingSpeed;
     [SerializeField] float runningSpeed;
     [SerializeField] Vector3 movement;
+    bool running = false;
     float currentMovementSpeed;
     // Start is called before the first frame update
     void Start()
@@ -18,7 +19,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currentMovementSpeed = walkingSpeed;
+        running = Input.GetButton("Run");
+        if (running)
+            currentMovementSpeed = runningSpeed;
+        else
+            currentMovementSpeed = walkingSpeed;
         float movementX = Input.GetAxisRaw("Horizontal");
         float movementY = Input.GetAxisRaw("Vertical");
         movement = new Vector3(movementX, movementY).normalized;
