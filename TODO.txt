@@ -1,2 +1,6 @@
 AI State Machine
 https://www.youtube.com/watch?v=dYi-i83sq5g&ab_channel=Blackthornprod
+
+Remember
+Ai for some reason slightly moves in the z axis when its start position in z is 0 so set it to 1 otherwise it can mess with spatial
+audio. This is a bug that comes with AStar
