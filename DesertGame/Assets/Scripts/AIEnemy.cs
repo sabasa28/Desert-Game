@@ -7,13 +7,13 @@ public class AIEnemy : MonoBehaviour
     AIDestinationSetter chaser;
     AIPath aiPath;
     Transform player;
-    protected enum State
+    public enum State
     { 
         idle,
         searching,
         chasing
     }
-    State currentState;
+    public State currentState;
 
     [SerializeField] float alertRange = 10;
     [SerializeField] float chasingRange = 15;
@@ -24,7 +24,7 @@ public class AIEnemy : MonoBehaviour
     [SerializeField] float maxPatrolDistance = 10;
     [SerializeField] float timeBetweeenPatrols = 4.0f;
     Vector3 originalPos;
-    Vector3 playersLastPos;
+    Vector3 playersLastPosSeen;
     float timer;
 
 
@@ -73,7 +73,14 @@ public class AIEnemy : MonoBehaviour
 
     bool CanSeePlayer(float distanceToCheck)
     {
-        return Vector2.Distance(transform.position, player.position) < distanceToCheck;
+        int layer = LayerMask.GetMask("Obstacle", "Default");
+        if (Vector2.Distance(transform.position, player.position) < distanceToCheck)
+        {
+            RaycastHit2D ray = Physics2D.Raycast(transform.position, (player.position - transform.position).normalized, distanceToCheck, layer);
+            Debug.DrawRay(transform.position, (player.position - transform.position).normalized * distanceToCheck, Color.red, 1.0f);
+            if (ray.collider.transform == player) return true;
+        }
+        return false;
     }
 
     protected virtual void Chase(bool seesPlayer)
@@ -85,7 +92,7 @@ public class AIEnemy : MonoBehaviour
         }
         else
         { 
-            aiPath.destination = playersLastPos;
+            aiPath.destination = playersLastPosSeen;
         }
     }
 
@@ -106,7 +113,7 @@ public class AIEnemy : MonoBehaviour
         if (currentState == State.chasing) return;
         if (Vector2.Distance(playerPos, new Vector2(transform.position.x, transform.position.y)) < soundDistance) //cambiar player pos por pos del objeto que hizo ruido
         {
-            playersLastPos = playerPos;
+            playersLastPosSeen = playerPos;
             Chase(false);
         }
     }
@@ -119,10 +126,20 @@ public class AIEnemy : MonoBehaviour
         Vector2 movementDir = new Vector2(randX, randY).normalized;
         Debug.Log("PATRULLANDO HACIA " + movementDir);
         RaycastHit2D ray = Physics2D.Raycast(transform.position, movementDir, maxPatrolDistance, (1 << LayerMask.NameToLayer("Obstacle")));
-        Debug.DrawRay(transform.position, movementDir * maxPatrolDistance, Color.red, 2.0f);
+        //Debug.DrawRay(transform.position, movementDir * maxPatrolDistance, Color.red, 2.0f);
         float movementRandLenght = Random.Range(minPatrolDistance, maxPatrolDistance);
         float movementLenght = ray.collider && (ray.distance < movementRandLenght) ? ray.distance : movementRandLenght;
         aiPath.destination = ((Vector2)transform.position + movementDir * movementLenght);
         aiPath.SearchPath();
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            Debug.Log("HURT");
+
+            collision.GetComponent<PlayerController>().TakeDamage();
+        }
     }
 }

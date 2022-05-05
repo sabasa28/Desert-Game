@@ -18,6 +18,10 @@ public class SpatialAudioController : MonoBehaviour
         if (collision.CompareTag("Enemy")) closeEnemies.Remove(collision.GetComponent<AIEnemy>());
     }
 
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.Space)) MakeSound();
+    }
     void MakeSound()//agregar parametros
     { 
         
