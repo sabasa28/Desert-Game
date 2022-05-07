@@ -16,21 +16,28 @@ public class PlayerController : MonoBehaviour
     bool isInvulnerable = false;
     [SerializeField] float invulnerabilityTime;
     [SerializeField] float invulnerabilityBlinkTime;
-    // Start is called before the first frame update
+    [SerializeField] GameObject lampLight;
+    [SerializeField] GameObject naturalLight;
+    bool lampOn = false;
     void Start()
     {
         currentMovementSpeed = walkingSpeed;
         GetComponent<Rigidbody2D>().sleepMode = RigidbodySleepMode2D.NeverSleep;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        #region Inputs
         running = Input.GetButton("Run");
+        if (Input.GetKeyDown(KeyCode.F)) ToggleLampState();
+
+        #endregion
+
         if (running)
         {
             currentMovementSpeed = runningSpeed;
             animator.speed = runningSpeed / walkingSpeed;
+            SetLampState(false);
         }
         else
         {
@@ -77,9 +84,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage()
     {
-        Debug.Log("ouch1");
         if (isInvulnerable) return;
-        Debug.Log("ouch2");
         isInvulnerable = true;
         StartCoroutine(Invulnerable());
     }
@@ -101,5 +106,17 @@ public class PlayerController : MonoBehaviour
         }
         spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1);
         isInvulnerable = false;
+    }
+
+    void ToggleLampState()
+    {
+        SetLampState(!lampOn);
+    }
+
+    void SetLampState(bool newState)
+    {
+        lampOn = newState;
+        naturalLight.SetActive(!lampOn);
+        lampLight.SetActive(lampOn);
     }
 }

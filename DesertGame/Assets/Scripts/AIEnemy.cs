@@ -23,6 +23,9 @@ public class AIEnemy : MonoBehaviour
     [SerializeField] float minPatrolDistance = 1;
     [SerializeField] float maxPatrolDistance = 10;
     [SerializeField] float timeBetweeenPatrols = 4.0f;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip idleSound;
+    [SerializeField] AudioClip chasingSound;
     Vector3 originalPos;
     Vector3 playersLastPosSeen;
     float timer;
@@ -39,6 +42,8 @@ public class AIEnemy : MonoBehaviour
         StartPartolling();
         originalPos = transform.localPosition;
         player = GameplayController.Get().GetCurrentPlayer().transform;
+        StartCoroutine(PlayIdleSound());
+        StartCoroutine(PlayRunningSound());
     }
 
     protected virtual void Update()
@@ -140,6 +145,36 @@ public class AIEnemy : MonoBehaviour
             Debug.Log("HURT");
 
             collision.GetComponent<PlayerController>().TakeDamage();
+        }
+    }
+
+    IEnumerator PlayIdleSound()
+    {
+        int rand;
+        while (true)
+        {
+            rand = Random.Range(2, 7);
+            yield return new WaitForSeconds(rand);
+            if (currentState == State.idle)
+            { 
+                audioSource.clip = idleSound;
+                audioSource.Play();
+            } 
+        }
+    }
+
+    IEnumerator PlayRunningSound()
+    {
+        int rand;
+        while (true)
+        {
+            rand = Random.Range(2, 3);
+            yield return new WaitForSeconds(rand);
+            if (currentState == State.chasing)
+            {
+                audioSource.clip = chasingSound;
+                audioSource.Play();
+            }
         }
     }
 }
