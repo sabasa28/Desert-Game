@@ -17,7 +17,8 @@ public class AIEnemy : MonoBehaviour
 
     [SerializeField] float alertRange = 10;
     [SerializeField] float chasingRange = 15;
-    [SerializeField] float hearingRange = 10;
+    [SerializeField] float maxHearingRange = 10;
+    [SerializeField] bool deaf = false;
     [SerializeField] bool returnsToOriginalPos;
     [SerializeField] bool patrols = true;
     [SerializeField] float minPatrolDistance = 1;
@@ -26,6 +27,8 @@ public class AIEnemy : MonoBehaviour
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioClip idleSound;
     [SerializeField] AudioClip chasingSound;
+    Noise HighestPriorityNoise;
+
     Vector3 originalPos;
     Vector3 playersLastPosSeen;
     float timer;
@@ -52,6 +55,7 @@ public class AIEnemy : MonoBehaviour
         {
             case State.idle:
                 if (CanSeePlayer(alertRange)) Chase(true);
+                else if (CanHearPlayerOrDecoy()) InvestigateNoise();
                 else if (patrols && aiPath.reachedEndOfPath)
                     if (timer < timeBetweeenPatrols)
                     {
@@ -67,6 +71,7 @@ public class AIEnemy : MonoBehaviour
                 break;
             case State.searching:
                 if (CanSeePlayer(chasingRange)) Chase(true);
+                else if (CanHearPlayerOrDecoy()) InvestigateNoise();
                 else if (aiPath.reachedEndOfPath)
                 {
                     if (returnsToOriginalPos && aiPath.destination != originalPos) aiPath.destination = originalPos;// aiPath.FinalizeMovement(posToDefend, transform.rotation);
@@ -86,6 +91,45 @@ public class AIEnemy : MonoBehaviour
             if (ray.collider.transform == player) return true;
         }
         return false;
+    }
+
+    bool CanHearPlayerOrDecoy()
+    {
+        return (HighestPriorityNoise.noiseLevel != NoiseLevel.none);
+    }
+
+    public void ReceiveNoise(Noise noise)
+    {
+        if (deaf) return;
+        float distToNoise = Vector2.Distance(noise.noiseOrigin, transform.position);
+        switch (noise.noiseLevel)
+        {
+            case NoiseLevel.none:
+                return;
+            case NoiseLevel.low:
+                if (distToNoise > maxHearingRange / 4.0f) return;
+                else break;
+            case NoiseLevel.medium:
+                if (distToNoise > maxHearingRange / 2.0f) return;
+                else break;
+            case NoiseLevel.high:
+                if (distToNoise > maxHearingRange) return;
+                else break;
+            case NoiseLevel.global:
+                break;
+            default:
+                break;
+        }
+        Debug.Log("Dist to noise " + distToNoise);
+        HighestPriorityNoise = noise; //TODO hacer un sistema para que checkee segun volumen y distancia si el ruido anterior es mas prioritario que el nuevo
+    }
+
+    public void InvestigateNoise()
+    {
+        aiPath.destination = HighestPriorityNoise.noiseOrigin;
+        HighestPriorityNoise.noiseLevel = NoiseLevel.none;
+        StartSearching();
+
     }
 
     protected virtual void Chase(bool seesPlayer)
@@ -131,7 +175,7 @@ public class AIEnemy : MonoBehaviour
         Vector2 movementDir = new Vector2(randX, randY).normalized;
         Debug.Log("PATRULLANDO HACIA " + movementDir);
         RaycastHit2D ray = Physics2D.Raycast(transform.position, movementDir, maxPatrolDistance, (1 << LayerMask.NameToLayer("Obstacle")));
-        //Debug.DrawRay(transform.position, movementDir * maxPatrolDistance, Color.red, 2.0f);
+        Debug.DrawRay(transform.position, movementDir * maxPatrolDistance, Color.red, 2.0f);
         float movementRandLenght = Random.Range(minPatrolDistance, maxPatrolDistance);
         float movementLenght = ray.collider && (ray.distance < movementRandLenght) ? ray.distance : movementRandLenght;
         aiPath.destination = ((Vector2)transform.position + movementDir * movementLenght);

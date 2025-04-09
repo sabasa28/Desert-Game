@@ -188,7 +188,8 @@ MonoBehaviour:
   currentState: 0
   alertRange: 10
   chasingRange: 15
-  hearingRange: 10
+  maxHearingRange: 15
+  deaf: 0
   returnsToOriginalPos: 0
   patrols: 1
   minPatrolDistance: 4
@@ -423,4 +424,4 @@ MonoBehaviour:
   - {x: -0.096989505, y: -0.117866285, z: 0}
   m_ShapePathHash: 949312428
   m_Mesh: {fileID: 0}
-  m_InstanceId: 18822
+  m_InstanceId: 33698

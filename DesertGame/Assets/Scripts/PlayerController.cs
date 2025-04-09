@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, INoisy
 {
     [SerializeField] float walkingSpeed;
     [SerializeField] float runningSpeed;
@@ -19,6 +19,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject lampLight;
     [SerializeField] GameObject naturalLight;
     bool lampOn = false;
+    NoiseMaker noiseMaker;
+    Inventory playerInventory;
+
+    private void Awake()
+    {
+        noiseMaker = GetComponentInChildren<NoiseMaker>();
+        playerInventory = GetComponent<Inventory>();
+    }
     void Start()
     {
         currentMovementSpeed = walkingSpeed;
@@ -91,7 +99,16 @@ public class PlayerController : MonoBehaviour
 
     public void Step()
     {
-        playerAudioSource.PlayOneShot(stepAudio);
+        float stepVolume = 0.5f;
+        NoiseLevel stepNoiseLevel = NoiseLevel.low;
+        if (running)
+        {
+            stepVolume = 1.0f;
+            stepNoiseLevel = NoiseLevel.high;
+        }
+
+        playerAudioSource.PlayOneShot(stepAudio, stepVolume);
+        NoiseWasMade(new Noise(stepNoiseLevel, transform.position));
     }
 
     IEnumerator Invulnerable()
@@ -118,5 +135,15 @@ public class PlayerController : MonoBehaviour
         lampOn = newState;
         naturalLight.SetActive(!lampOn);
         lampLight.SetActive(lampOn);
+    }
+
+    public void NoiseWasMade(Noise noise)
+    {
+        noiseMaker.AlertCloseNoiseCatchers(noise);
+    }
+
+    public Inventory GetPlayerInventory()
+    {
+        return playerInventory;
     }
 }

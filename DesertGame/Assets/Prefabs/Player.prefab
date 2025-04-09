@@ -113,6 +113,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7849349870536637217}
   - component: {fileID: 7849349870536637216}
+  - component: {fileID: 2355100021435026482}
   - component: {fileID: 7849349870536637218}
   - component: {fileID: 7849349870536637219}
   - component: {fileID: 7849349870536637221}
@@ -143,6 +144,7 @@ Transform:
   - {fileID: 7849349870249356662}
   - {fileID: 7849349871081596582}
   - {fileID: 7849349871758464599}
+  - {fileID: 5105323449075667778}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -169,6 +171,18 @@ MonoBehaviour:
   invulnerabilityBlinkTime: 0.2
   lampLight: {fileID: 7849349871552236145}
   naturalLight: {fileID: 7849349870622739727}
+--- !u!114 &2355100021435026482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7849349870536637247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ffb7f31a7cbcf64593ed11f1be77ea5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!61 &7849349870536637218
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -815,3 +829,65 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1001 &7380627533889484537
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7849349870536637217}
+    m_Modifications:
+    - target: {fileID: 2356650359156614587, guid: ffb5414f76f2afc42a343df1c4356004, type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2356650359156614587, guid: ffb5414f76f2afc42a343df1c4356004, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2356650359156614587, guid: ffb5414f76f2afc42a343df1c4356004, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2356650359156614587, guid: ffb5414f76f2afc42a343df1c4356004, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2356650359156614587, guid: ffb5414f76f2afc42a343df1c4356004, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2356650359156614587, guid: ffb5414f76f2afc42a343df1c4356004, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2356650359156614587, guid: ffb5414f76f2afc42a343df1c4356004, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2356650359156614587, guid: ffb5414f76f2afc42a343df1c4356004, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2356650359156614587, guid: ffb5414f76f2afc42a343df1c4356004, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2356650359156614587, guid: ffb5414f76f2afc42a343df1c4356004, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2356650359156614587, guid: ffb5414f76f2afc42a343df1c4356004, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395093683352356006, guid: ffb5414f76f2afc42a343df1c4356004, type: 3}
+      propertyPath: m_Name
+      value: NoiseMaker
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ffb5414f76f2afc42a343df1c4356004, type: 3}
+--- !u!4 &5105323449075667778 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2356650359156614587, guid: ffb5414f76f2afc42a343df1c4356004, type: 3}
+  m_PrefabInstance: {fileID: 7380627533889484537}
+  m_PrefabAsset: {fileID: 0}
